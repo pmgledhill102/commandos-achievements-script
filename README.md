@@ -6,7 +6,10 @@ Hacky script to show progress towards Commandos: Origins global achievements
 
 When playing `Commandos: Origins` there are 3 global achievements that are difficult to
 track using the UI. There's a great Steam community guide on how to find our progress
-based on a `.sav` file contents, using a Hex Editor.
+based on a `.sav` file contents, using a Hex Editor:
+
+[How to Track Progress of 3 Global Achievements](https://steamcommunity.com/sharedfiles/filedetails/?id=3465222261) by
+[KV](https://steamcommunity.com/profiles/76561198068871010)
 
 I decided to try and codify it, to make it easier.
 
