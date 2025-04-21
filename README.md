@@ -14,42 +14,18 @@ I decided to try and codify it, to make it easier.
 
 I wrote it in PowerShell so it should run on any Windows machine, just run:
 
-```
-.\CheckAchievements.ps1
+``` cmd
+pwsh CheckAchievements.ps1
 ```
 
 ## Output
 
 It should find any completed maps, and show progress against the achievements:
 
-```
-Map: BritishCompound
-  bWereAllEnemiesKilled:    False
-  bWasNoEnemyKilled:        False
-  bWasGlobalAlarmSetOff:    False
-  DifficultyHard:           False
-
-Map: Weatherstation
-  bWereAllEnemiesKilled:    True
-  bWasNoEnemyKilled:        False
-  bWasGlobalAlarmSetOff:    False
-  DifficultyHard:           False
-
-Map: FortCapuzzo1
-  bWereAllEnemiesKilled:    True
-  bWasNoEnemyKilled:        False
-  bWasGlobalAlarmSetOff:    False
-  DifficultyHard:           True
-
-Map: TrainBridge
-  bWereAllEnemiesKilled:    True
-  bWasNoEnemyKilled:        False
-  bWasGlobalAlarmSetOff:    False
-  DifficultyHard:           True
-```
+![Example Output](imgs/example.png)
 
 ## Disclaimer
 
-The way it's written - it's really likely they'll "break" the script with a future update.
+The way it's written - it's really likely they'll "break" the script with a future update. Also, I've only completed 4 levels, it may break with later level names.
 
 Be warned.
