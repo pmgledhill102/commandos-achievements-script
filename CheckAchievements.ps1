@@ -62,7 +62,7 @@ foreach ($match in $matches) {
     Write-Host ($killedNone) -ForegroundColor:($(if ($killedNone) { "Green" } else { "Red" }))
 
     Write-Host "  bWasGlobalAlarmSetOff:    " -NoNewline
-    Write-Host ($alarmSet) -ForegroundColor:($(if ($alarmSet) { "Red" } else { "Green" }))
+    Write-Host ($alarmSet) -ForegroundColor:($(if ($alarmSet) { "Green" } else { "Red" }))
 
     Write-Host "  DifficultyHard:           " -NoNewline
     Write-Host ($difficultyHard) -ForegroundColor:($(if ($difficultyHard) { "Green" } else { "Red" }))
