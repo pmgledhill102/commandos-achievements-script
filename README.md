@@ -29,6 +29,6 @@ It should find any completed maps, and show progress against the achievements:
 
 ## Disclaimer
 
-The way it's written - it's really likely they'll "break" the script with a future update. Also, I've only completed 4 levels, it may break with later level names.
+The way it's written - it's really likely they'll "break" the script with a future update. Also, I've only completed 6 levels, it may break with later level names.
 
 Be warned.
