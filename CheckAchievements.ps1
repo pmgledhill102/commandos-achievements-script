@@ -11,48 +11,69 @@ $hex = ($bytes | ForEach-Object { $_.ToString("x2") }) -join ""
 
 # Define key fields as hex
 $hexMap = @{
-    bWereAllEnemiesKilled   = "6257657265416c6c456e656d6965734b696c6c6564"
-    bWasNoEnemyKilled       = "625761734e6f456e656d794b696c6c6564"
-    bWasGlobalAlarmSetOff   = "62576173476c6f62616c416c61726d5365744f6666"
     CompletionTime          = "436f6d706c6574696f6e54696d65"
-    DifficultyHard          = "446966666963756c74792e48617264"
+    bWereAllEnemiesKilled   = "6257657265416c6c456e656d6965734b696c6c6564000d000000426f6f6c50726f7065727479"
+    bWasNoEnemyKilled       = "625761734e6f456e656d794b696c6c6564000d000000426f6f6c50726f7065727479"
+    bWasGlobalAlarmSetOff   = "62576173476c6f62616c416c61726d5365744f6666000d000000426f6f6c50726f7065727479"
 }
 
-# Regex pattern to match a chunk
+# Define the regex pattern - map names
 $pattern = @"
-(?:00)*
-(?<MapName>((?:(?!00)[0-9a-f]{2})+))
+(?<MapName>((?:(?!00)[0-9a-f]{2}){1,18}))
 (?:(00|0f)+)
 $($hexMap.CompletionTime)
-[0-9a-f]+?
-(?<HardDifficultyFlag>$($hexMap.DifficultyHard))?
-[0-9a-f]{0,10}
-$($hexMap.bWereAllEnemiesKilled)[00-9a-f]*?(?<KilledAllVal>00|10)12
-[0-9a-f]*?
-$($hexMap.bWasNoEnemyKilled)[0-9a-f]*?(?<KilledNoneVal>00|10)18
-[0-9a-f]*?
-$($hexMap.bWasGlobalAlarmSetOff)[0-9a-f]*?(?<AlarmVal>00|10)15
-"@ -replace "`r`n", ""
+"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
 
-# Run the regex
-$matches = [regex]::Matches($hex, $pattern)
+# Test the regex pattern
+$matchesMap = [regex]::Matches($hex, $pattern)
+Write-Host "Map matches found: $($matchesMap.Count)"
 
-if ($matches.Count -eq 0) {
-    Write-Host "No matches found."
-    exit
-}
+# Define the regex pattern - kill all
+$pattern = @"
+$($hexMap.bWereAllEnemiesKilled)
+(?:00){9}
+(?<KilledAllVal>00|10)
+12
+"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
 
-foreach ($match in $matches) {
-    $mapHex = $match.Groups["MapName"].Value
+# Test the regex pattern
+$matchesKillAll = [regex]::Matches($hex, $pattern)
+Write-Host "Kill All matches found: $($matchesKillAll.Count)"
+
+# Define the regex pattern - kill none
+$pattern = @"
+$($hexMap.bWasNoEnemyKilled)
+(?:00){9}
+(?<KilledNoneVal>00|10)
+18
+"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
+
+# Test the regex pattern
+$matchesKillNone = [regex]::Matches($hex, $pattern)
+Write-Host "Kill None matches found: $($matchesKillNone.Count)"
+
+# Define the regex pattern - alarm
+$pattern = @"
+$($hexMap.bWasGlobalAlarmSetOff)
+(?:00){9}
+(?<AlarmVal>00|10)
+15
+"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
+
+# Test the regex pattern
+$matchesAlarm = [regex]::Matches($hex, $pattern)
+Write-Host "Alarm matches found: $($matchesAlarm.Count)"
+
+# Output the result
+for ($i = 0; $i -lt $matchesMap.Count; $i++) {
+    $mapHex = $matchesMap[$i].Groups["MapName"].Value
     $mapName = -join (
         ($mapHex -split '(.{2})' | Where-Object { $_ -match '^[0-9a-f]{2}$' }) |
         ForEach-Object { [char]([Convert]::ToInt32($_, 16)) }
     )
-
-    $difficultyHard = $match.Groups["HardDifficultyFlag"].Success
-    $killedAll = if ($match.Groups["KilledAllVal"].Value -eq '10') { $true } else { $false }
-    $killedNone = if ($match.Groups["KilledNoneVal"].Value -eq '10') { $true } else { $false }
-    $alarmSet = if ($match.Groups["AlarmVal"].Value -eq '10') { $true } else { $false }
+    $killedAll = if ($matchesKillAll[$i].Groups["KilledAllVal"].Value -eq '10') { $true } else { $false }
+    $killedNone = if ($matchesKillNone[$i].Groups["KilledNoneVal"].Value -eq '10') { $true } else { $false }
+    $alarmSet = if ($matchesAlarm[$i].Groups["AlarmVal"].Value -eq '10') { $true } else { $false }
 
     Write-Host "`nMap: $mapName"
     Write-Host "  bWereAllEnemiesKilled:    " -NoNewline
@@ -63,8 +84,5 @@ foreach ($match in $matches) {
 
     Write-Host "  bWasGlobalAlarmSetOff:    " -NoNewline
     Write-Host ($alarmSet) -ForegroundColor:($(if ($alarmSet) { "Green" } else { "Red" }))
-
-    Write-Host "  DifficultyHard:           " -NoNewline
-    Write-Host ($difficultyHard) -ForegroundColor:($(if ($difficultyHard) { "Green" } else { "Red" }))
 
 }

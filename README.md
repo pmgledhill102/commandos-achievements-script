@@ -27,6 +27,11 @@ It should find any completed maps, and show progress against the achievements:
 
 ![Example Output](imgs/example.png)
 
+## Updates
+
+Thanks to [KV](https://steamcommunity.com/profiles/76561198068871010) for providing updates to the code, as it seemed
+to only work on certain machines.
+
 ## Disclaimer
 
 The way it's written - it's really likely they'll "break" the script with a future update. Also, I've only completed 6 levels, it may break with later level names.
