@@ -38,6 +38,14 @@ It should find any completed maps, and show progress against the achievements:
 Thanks to [KV](https://steamcommunity.com/profiles/76561198068871010) for providing updates to the code, as it seemed
 to only work on certain machines.
 
+## Contributors
+
+Thanks to:
+
+- [KV](https://steamcommunity.com/profiles/76561198068871010): original save file hex work
+- [bazsodombiandras](https://github.com/bazsodombiandras): PowerShell improvements
+- [Zillu](https://steamcommunity.com/id/malcolmzillu27): Helping debug issues
+
 ## Disclaimer
 
 The way it's written - it's really likely they'll "break" the script with a future update. Also, I've only completed 6 levels, it may break with later level names.
