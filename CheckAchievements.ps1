@@ -25,7 +25,7 @@ $pattern = @"
 (?<MapName>((?:(?!00)[0-9a-f]{2}){1,18}))
 (?:(00|0f)+)
 $($hexMap.CompletionTime)
-"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
+"@ -replace "[\`r\`n]", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
 $matchesMap = [regex]::Matches($hex, $pattern, $regexOptions)
@@ -49,7 +49,7 @@ $($hexMap.bWasNoEnemyKilled)
 (?:00){9}
 (?<KilledNoneVal>00|10)
 18
-"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
+"@ -replace "[\`r\`n]", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
 $matchesKillNone = [regex]::Matches($hex, $pattern, $regexOptions)
@@ -61,7 +61,7 @@ $($hexMap.bWasGlobalAlarmSetOff)
 (?:00){9}
 (?<AlarmVal>00|10)
 15
-"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
+"@ -replace "[\`r\`n]", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
 $matchesAlarm = [regex]::Matches($hex, $pattern, $regexOptions)
