@@ -17,6 +17,9 @@ $hexMap = @{
     bWasGlobalAlarmSetOff   = "62576173476c6f62616c416c61726d5365744f6666000d000000426f6f6c50726f7065727479"
 }
 
+# Define regex options
+$regexOptions = [System.Text.RegularExpressions.RegexOptions]::CultureInvariant
+
 # Define the regex pattern - map names
 $pattern = @"
 (?<MapName>((?:(?!00)[0-9a-f]{2}){1,18}))
@@ -25,7 +28,7 @@ $($hexMap.CompletionTime)
 "@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
-$matchesMap = [regex]::Matches($hex, $pattern)
+$matchesMap = [regex]::Matches($hex, $pattern, $regexOptions)
 Write-Host "Map matches found: $($matchesMap.Count)"
 
 # Define the regex pattern - kill all
@@ -37,7 +40,7 @@ $($hexMap.bWereAllEnemiesKilled)
 "@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
-$matchesKillAll = [regex]::Matches($hex, $pattern)
+$matchesKillAll = [regex]::Matches($hex, $pattern, $regexOptions)
 Write-Host "Kill All matches found: $($matchesKillAll.Count)"
 
 # Define the regex pattern - kill none
@@ -49,7 +52,7 @@ $($hexMap.bWasNoEnemyKilled)
 "@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
-$matchesKillNone = [regex]::Matches($hex, $pattern)
+$matchesKillNone = [regex]::Matches($hex, $pattern, $regexOptions)
 Write-Host "Kill None matches found: $($matchesKillNone.Count)"
 
 # Define the regex pattern - alarm
@@ -61,7 +64,7 @@ $($hexMap.bWasGlobalAlarmSetOff)
 "@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
-$matchesAlarm = [regex]::Matches($hex, $pattern)
+$matchesAlarm = [regex]::Matches($hex, $pattern, $regexOptions)
 Write-Host "Alarm matches found: $($matchesAlarm.Count)"
 
 # Output the result
