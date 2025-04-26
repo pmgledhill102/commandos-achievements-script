@@ -33,16 +33,11 @@ It should find any completed maps, and show progress against the achievements:
 
 ![Example Output](imgs/example.png)
 
-## Updates
-
-Thanks to [KV](https://steamcommunity.com/profiles/76561198068871010) for providing updates to the code, as it seemed
-to only work on certain machines.
-
 ## Contributors
 
 Thanks to:
 
-- [KV](https://steamcommunity.com/profiles/76561198068871010): original save file hex work
+- [KV](https://steamcommunity.com/profiles/76561198068871010): original save file hex work, and updates to improve compatibility
 - [bazsodombiandras](https://github.com/bazsodombiandras): PowerShell improvements
 - [Zillu](https://steamcommunity.com/id/malcolmzillu27): Helping debug issues
 
