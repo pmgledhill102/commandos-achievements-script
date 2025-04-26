@@ -18,7 +18,13 @@ I decided to try and codify it, to make it easier.
 I wrote it in PowerShell so it should run on any Windows machine, just run:
 
 ``` cmd
-pwsh CheckAchievements.ps1
+pwsh -ExecutionPolicy Bypass -File "CheckAchievements.ps1"
+```
+
+Alternatively, you may run the `CheckAchievements.bat` batch file which calls the script with the appropriate arguments:
+
+``` cmd
+CheckAchievements.bat
 ```
 
 ## Output
