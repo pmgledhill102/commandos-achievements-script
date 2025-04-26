@@ -37,7 +37,7 @@ $($hexMap.bWereAllEnemiesKilled)
 (?:00){9}
 (?<KilledAllVal>00|10)
 12
-"@ -replace "`r`n", ""  # Remove newlines to make the pattern one continuous string
+"@ -replace "[\`r\`n]", ""  # Remove newlines to make the pattern one continuous string
 
 # Test the regex pattern
 $matchesKillAll = [regex]::Matches($hex, $pattern, $regexOptions)
