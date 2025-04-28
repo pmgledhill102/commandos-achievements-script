@@ -29,7 +29,7 @@ $($hexMap.CompletionTime)
 
 # Test the regex pattern
 $matchesMap = [regex]::Matches($hex, $pattern, $regexOptions)
-Write-Host "Map matches found: $($matchesMap.Count)"
+Write-Debug "Map matches found: $($matchesMap.Count)"
 
 # Define the regex pattern - kill all
 $pattern = @"
@@ -41,7 +41,7 @@ $($hexMap.bWereAllEnemiesKilled)
 
 # Test the regex pattern
 $matchesKillAll = [regex]::Matches($hex, $pattern, $regexOptions)
-Write-Host "Kill All matches found: $($matchesKillAll.Count)"
+Write-Debug "Kill All matches found: $($matchesKillAll.Count)"
 
 # Define the regex pattern - kill none
 $pattern = @"
@@ -53,7 +53,7 @@ $($hexMap.bWasNoEnemyKilled)
 
 # Test the regex pattern
 $matchesKillNone = [regex]::Matches($hex, $pattern, $regexOptions)
-Write-Host "Kill None matches found: $($matchesKillNone.Count)"
+Write-Debug "Kill None matches found: $($matchesKillNone.Count)"
 
 # Define the regex pattern - alarm
 $pattern = @"
@@ -65,7 +65,11 @@ $($hexMap.bWasGlobalAlarmSetOff)
 
 # Test the regex pattern
 $matchesAlarm = [regex]::Matches($hex, $pattern, $regexOptions)
-Write-Host "Alarm matches found: $($matchesAlarm.Count)"
+Write-Debug "Alarm matches found: $($matchesAlarm.Count)"
+
+# Output a header for the table
+Write-Host "`nMap Name            Killed All    Killed None   Alarm Set Off"
+Write-Host "-------------------------------------------------------------"
 
 # Output the result
 for ($i = 0; $i -lt $matchesMap.Count; $i++) {
@@ -74,18 +78,22 @@ for ($i = 0; $i -lt $matchesMap.Count; $i++) {
         ($mapHex -split '(.{2})' | Where-Object { $_ -match '^[0-9a-f]{2}$' }) |
         ForEach-Object { [char]([Convert]::ToInt32($_, 16)) }
     )
+
     $killedAll = if ($matchesKillAll[$i].Groups["KilledAllVal"].Value -eq '10') { $true } else { $false }
     $killedNone = if ($matchesKillNone[$i].Groups["KilledNoneVal"].Value -eq '10') { $true } else { $false }
     $alarmSet = if ($matchesAlarm[$i].Groups["AlarmVal"].Value -eq '10') { $true } else { $false }
 
-    Write-Host "`nMap: $mapName"
-    Write-Host "  bWereAllEnemiesKilled:    " -NoNewline
-    Write-Host ($killedAll) -ForegroundColor:($(if ($killedAll) { "Green" } else { "Red" }))
-
-    Write-Host "  bWasNoEnemyKilled:        " -NoNewline
-    Write-Host ($killedNone) -ForegroundColor:($(if ($killedNone) { "Green" } else { "Red" }))
-
-    Write-Host "  bWasGlobalAlarmSetOff:    " -NoNewline
-    Write-Host ($alarmSet) -ForegroundColor:($(if ($alarmSet) { "Green" } else { "Red" }))
-
+    # First map is a special case
+    if ($mapName -eq "BritishCompound") {
+        Write-Host "$mapName".PadRight(20, ' ') -ForegroundColor:($(if ($killedAll -and $killedNone) { "Green" } else { "Red" })) -NoNewline 
+        Write-Host ($killedAll).ToString().PadRight(14, ' ') -ForegroundColor:($(if ($killedAll) { "Green" } else { "Red" })) -NoNewline 
+        Write-Host ($killedNone).ToString().PadRight(14, ' ') -ForegroundColor:($(if ($killedNone) { "Green" } else { "Red" })) -NoNewline 
+        Write-Host ($alarmSet).ToString().PadRight(14, ' ') -ForegroundColor:("Green")
+        continue
+    }
+    
+    Write-Host "$mapName".PadRight(20, ' ') -ForegroundColor:($(if ($killedAll -and $killedNone -and $alarmSet) { "Green" } else { "Red" })) -NoNewline 
+    Write-Host ($killedAll).ToString().PadRight(14, ' ') -ForegroundColor:($(if ($killedAll) { "Green" } else { "Red" })) -NoNewline 
+    Write-Host ($killedNone).ToString().PadRight(14, ' ') -ForegroundColor:($(if ($killedNone) { "Green" } else { "Red" })) -NoNewline 
+    Write-Host ($alarmSet).ToString().PadRight(14, ' ') -ForegroundColor:($(if ($alarmSet) { "Green" } else { "Red" }))
 }
